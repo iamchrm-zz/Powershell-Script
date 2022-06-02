@@ -29,8 +29,9 @@ function install{
         Write-Warning "[LOADING] Descargando..."
         Invoke-WebRequest -Uri http://minecraa.duckdns.org/fabric-0.11.0.exe -OutFile $ACTUAL_DIR\fabric.exe
         Start-Process -FilePath "fabric.exe" -ArgumentList "open" -Wait
+        Write-Warning "[OK] Fabric instalado"
     }
-
+    Write-Warning "[WORKING] Comenzando la descarga de los mods"
     if ( Test-Path $ACTUAL_DIR\file.zip) {
         Write-Warning "[WORKING] Descomprimiendo el archivo..."
         Expand-Archive -Path $ACTUAL_DIR\file.zip -DestinationPath $ACTUAL_DIR -Force
@@ -39,7 +40,7 @@ function install{
         Remove-Item $ACTUAL_DIR\file.zip
         Write-Warning "[OK] Limpiado."
     } else {
-        Write-Warning "[WORKING] Descargando nuevamente..."
+        Write-Warning "[WORKING] Descargando el archivo..."
         Invoke-WebRequest -Uri http://minecraa.duckdns.org/a.zip -OutFile $ACTUAL_DIR\file.zip
         Write-Warning "[OK] Archivo descargado."
         Write-Warning "[WORKING] Descomprimiendo el archivo..."
