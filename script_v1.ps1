@@ -5,7 +5,7 @@ $ACTUAL_DIR = (Get-Location).Path
 function menu {
     Clear-Host
     do {
-        $resp = read-host "[!] ¿Qué desea realizar?: 
+        $resp = read-host "[!] ¿Que desea realizar?: 
 [=>] 1. Actualizar 
 [=>] 2. Instalar 
 [=>] 3. Salir 
