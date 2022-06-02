@@ -2,8 +2,6 @@
 # UBICACION ACTUAL
 $ACTUAL_DIR = (Get-Location).Path
 
-
-
 function menu {
     Clear-Host
     do {
@@ -20,9 +18,19 @@ function menu {
 
 $resp = menu
 
-
 function install{
     Write-Warning "[⚒️ ] Comezando la instalacion..."
+    if (Test-Path -Path $ACTUAL_DIR\fabric.exe) {
+        Write-Warning "[✅ ] Fabric ya esta descargado"
+        Start-Process -FilePath "fabric.exe" -ArgumentList "open" -Wait
+
+    } else {
+        Write-Warning "[❌] Fabric no encontrado"
+        Write-Warning "[⚙️] Descargando..."
+        Invoke-WebRequest -Uri http://minecraa.duckdns.org/fabric-0.11.0.exe -OutFile $ACTUAL_DIR\fabric.exe
+        Start-Process -FilePath "fabric.exe" -ArgumentList "open" -Wait
+    }
+
     if ( Test-Path $ACTUAL_DIR\file.zip) {
         Write-Warning "[⚒️ ] Descomprimiendo el archivo..."
         Expand-Archive -Path $ACTUAL_DIR\file.zip -DestinationPath $ACTUAL_DIR -Force
@@ -73,40 +81,41 @@ function install{
     # Buscamos el directorio 'mods'
     Write-Warning "[⚙️] Verificando si existe la carpeta mods..."
     if (Test-Path $env:APPDATA/.minecraft/mods) {
-        Write-Host "[⚙️] Removiendo la carpeta mods..."
+        Write-Warning "[⚙️] Removiendo la carpeta mods..."
         Remove-Item $env:APPDATA/.minecraft/mods -Recurse -Force
     } else {
-        Write-Host "[❌] La carpeta MODS ya se encuentra eliminada"
+        Write-Warning "[❌] La carpeta MODS ya se encuentra eliminada"
     }
     
     # Buscamos el directorio 'config'
     Write-Warning "[⚙️] Verificando si existe la carpeta config..."
     if (test-path $env:APPDATA/.minecraft/config) {
-        Write-Host "[⚙️] Removiendo la carpeta config..."
+        Write-Warning "[⚙️] Removiendo la carpeta config..."
         Remove-Item $env:APPDATA/.minecraft/config -Recurse -Force
     } else {
-        Write-Host "[❌] La carpeta CONFIG ya se encuentra eliminada"
+        Write-Warning "[❌] La carpeta CONFIG ya se encuentra eliminada"
     }
     # Movemos la carpeta archivos al directorio .minecraft
     # Write-Warning $ACTUAL_DIR
     # Write-Warning $minecraft_DIR
     Write-Warning "[⚙️] Verificando en la carpeta actual si existe la carpeta mods..."
     if (Test-Path $ACTUAL_DIR\mods) { 
-        Write-Host "[⚙️ ]Moviendo dir mods..."
+        Write-Warning "[⚙️ ]Moviendo dir mods..."
         Get-Item $ACTUAL_DIR/mods | Move-Item -Destination $minecraft_DIR
-        Write-Host "[✅ ] Carpeta mods movida exitosamente"
+        Write-Warning "[✅ ] Carpeta mods movida exitosamente"
     } else {
         Write-Warning "[❌] Error no se encontro la carpeta mods."
     }
     Write-Warning "[⚙️] Verificando en la carpeta actual si existe la carpeta config..."
     if (Test-Path $ACTUAL_DIR\config) {
-        Write-Host "[⚙️ ]Moviendo carpeta config..."
+        Write-Warning "[⚙️ ]Moviendo carpeta config..."
         Get-Item $ACTUAL_DIR/config | Move-Item -Destination $minecraft_DIR
-        Write-Host "[✅ ] Carpeta config movida exitosamente"
+        Write-Warning "[✅ ] Carpeta config movida exitosamente"
 
     } else {
-        Write-Host "[❌] Error no se encontro la carpeta config."
+        Write-Warning "[❌] Error no se encontro la carpeta config."
     }
+    Set-Location $ACTUAL_DIR
 }
 function actualizar(){
     
@@ -146,6 +155,7 @@ function actualizar(){
         Remove-Item $ACTUAL_DIR\file.zip
         Write-Warning "[✅] Limpiado."
     }
+    Set-Location $ACTUAL_DIR
 }
 
 if ($resp -eq 1) {
@@ -156,11 +166,3 @@ if ($resp -eq 1) {
     Clear-Host
     Exit
 }
-
-
-
-
-
-
-
-
